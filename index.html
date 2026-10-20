@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ElectroVia Support</title>
+    <style>
+      :root {
+        --ink: #14161a;
+        --muted: #666b73;
+        --line: #e7e5e0;
+        --bg: #ffffff;
+        --tint: #f6f5f1;
+        --accent: #2f3fd6;
+        --accent-ink: #2333b8;
+        --ok: #1f9d55;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+      body {
+        font:
+          16px/1.6 system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          Helvetica,
+          Arial,
+          sans-serif;
+        color: var(--ink);
+        background: var(--bg);
+      }
+      a {
+        color: inherit;
+      }
+      .wrap {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      /* Header */
+      header {
+        background: var(--tint);
+        border-bottom: 1px solid var(--line);
+      }
+      header .wrap {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 64px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 650;
+        letter-spacing: -0.01em;
+        text-decoration: none;
+      }
+      .mark {
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
+        background: var(--ink);
+        position: relative;
+      }
+      .mark::after {
+        content: "";
+        position: absolute;
+        left: 6px;
+        top: 5px;
+        width: 10px;
+        height: 12px;
+        border-left: 3px solid #fff;
+        border-top: 3px solid #fff;
+        border-bottom: 3px solid #fff;
+        border-radius: 1px;
+      }
+      header nav {
+        display: flex;
+        gap: 28px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      header nav a {
+        text-decoration: none;
+      }
+      header nav a:hover {
+        color: var(--ink);
+      }
+      header nav a[aria-current] {
+        color: var(--ink);
+        font-weight: 500;
+      }
+
+      /* Hero */
+      .hero {
+        background: var(--tint);
+        border-bottom: 1px solid var(--line);
+      }
+      .hero .wrap {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 56px;
+        align-items: center;
+        padding-top: 80px;
+        padding-bottom: 88px;
+      }
+      .eyebrow {
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+      h1 {
+        margin-top: 12px;
+        font-size: 46px;
+        line-height: 1.1;
+        font-weight: 650;
+        letter-spacing: -0.025em;
+      }
+      .lede {
+        margin-top: 18px;
+        font-size: 17px;
+        color: var(--muted);
+        max-width: 46ch;
+      }
+      .meta {
+        display: flex;
+        gap: 24px;
+        margin-top: 28px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .meta strong {
+        display: block;
+        color: var(--ink);
+        font-weight: 600;
+        font-size: 15px;
+      }
+
+      /* Call card */
+      .card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 28px;
+        box-shadow:
+          0 1px 2px rgba(20, 22, 26, 0.04),
+          0 12px 32px rgba(20, 22, 26, 0.07);
+      }
+      .agent {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: #e9ebfb;
+        color: var(--accent);
+        display: grid;
+        place-items: center;
+        font-weight: 650;
+        font-size: 18px;
+      }
+      .agent-name {
+        font-weight: 600;
+      }
+      .status {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--ok);
+        box-shadow: 0 0 0 3px rgba(31, 157, 85, 0.15);
+      }
+      .card dl {
+        margin-top: 22px;
+        border-top: 1px solid var(--line);
+      }
+      .card dl div {
+        display: flex;
+        justify-content: space-between;
+        padding: 11px 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 14px;
+      }
+      .card dt {
+        color: var(--muted);
+      }
+      .card dd {
+        font-weight: 500;
+      }
+      .btn {
+        display: block;
+        width: 100%;
+        margin-top: 22px;
+        padding: 13px 20px;
+        background: var(--accent);
+        color: #fff;
+        border: 0;
+        border-radius: 8px;
+        font: inherit;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.15) inset,
+          0 2px 6px rgba(47, 63, 214, 0.25);
+        transition: background 0.15s ease;
+      }
+      .btn:hover {
+        background: var(--accent-ink);
+      }
+      .btn:focus-visible,
+      .link:focus-visible,
+      summary:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+      }
+      .card .hint {
+        margin-top: 12px;
+        font-size: 13px;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      /* Sections */
+      section {
+        padding: 80px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      section:last-of-type {
+        border-bottom: 0;
+      }
+      h2 {
+        font-size: 26px;
+        font-weight: 650;
+        letter-spacing: -0.015em;
+      }
+      .sub {
+        margin-top: 6px;
+        color: var(--muted);
+      }
+
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        margin-top: 36px;
+        counter-reset: step;
+        list-style: none;
+      }
+      .steps li {
+        padding: 24px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fff;
+      }
+      .steps li::before {
+        counter-increment: step;
+        content: counter(step);
+        display: grid;
+        place-items: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #e9ebfb;
+        color: var(--accent);
+        font-size: 13px;
+        font-weight: 650;
+      }
+      .steps h3 {
+        margin-top: 16px;
+        font-size: 16px;
+        font-weight: 600;
+      }
+      .steps p {
+        margin-top: 4px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+
+      .split {
+        display: grid;
+        grid-template-columns: 0.8fr 1.2fr;
+        gap: 56px;
+      }
+      .list {
+        list-style: none;
+        border-top: 1px solid var(--line);
+      }
+      .list li {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 15px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .list li span:last-child {
+        color: var(--muted);
+        text-align: right;
+      }
+
+      details {
+        border-bottom: 1px solid var(--line);
+      }
+      details:first-of-type {
+        border-top: 1px solid var(--line);
+      }
+      summary {
+        padding: 16px 0;
+        cursor: pointer;
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        font-weight: 500;
+      }
+      summary::-webkit-details-marker {
+        display: none;
+      }
+      summary::after {
+        content: "+";
+        color: var(--muted);
+        font-weight: 400;
+      }
+      details[open] summary::after {
+        content: "–";
+      }
+      details p {
+        padding: 0 0 18px;
+        color: var(--muted);
+        max-width: 60ch;
+      }
+
+      footer {
+        background: var(--tint);
+        border-top: 1px solid var(--line);
+        padding: 28px 0;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      footer .wrap {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      /* Call panel */
+      .panel {
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        width: 380px;
+        height: 620px;
+        max-height: calc(100vh - 48px);
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        box-shadow: 0 20px 60px rgba(20, 22, 26, 0.18);
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 10;
+      }
+      .panel.open {
+        display: flex;
+      }
+      .panel-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--line);
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .panel-head div {
+        display: flex;
+        gap: 16px;
+      }
+      .link {
+        background: none;
+        border: 0;
+        font: inherit;
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--muted);
+        cursor: pointer;
+      }
+      .link:hover {
+        color: var(--ink);
+      }
+      .panel iframe {
+        flex: 1;
+        width: 100%;
+        border: 0;
+      }
+
+      @media (max-width: 860px) {
+        .hero .wrap {
+          grid-template-columns: 1fr;
+          gap: 40px;
+          padding-top: 56px;
+          padding-bottom: 64px;
+        }
+        .split {
+          grid-template-columns: 1fr;
+          gap: 24px;
+        }
+        .steps {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 600px) {
+        h1 {
+          font-size: 34px;
+        }
+        header nav {
+          gap: 18px;
+        }
+        section {
+          padding: 56px 0;
+        }
+        .list li {
+          flex-direction: column;
+          gap: 2px;
+        }
+        .list li span:last-child {
+          text-align: left;
+        }
+        .panel {
+          inset: 0;
+          width: auto;
+          height: auto;
+          max-height: none;
+          border-radius: 0;
+          border: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <a class="brand" href="#"
+          ><span class="mark" aria-hidden="true"></span>ElectroVia</a
+        >
+        <nav>
+          <a href="#">Shop</a>
+          <a href="#">Orders</a>
+          <a href="#" aria-current="page">Support</a>
+        </nav>
+      </div>
+    </header>
+
+    <div class="hero">
+      <div class="wrap">
+        <div>
+          <p class="eyebrow">Support</p>
+          <h1>Help with your order, in one call.</h1>
+          <p class="lede">
+            Ken, our voice assistant, can check, change, cancel or return an
+            order while you're on the line.
+          </p>
+          <div class="meta">
+            <div><strong>24/7</strong>Always open</div>
+            <div><strong>EN · DE</strong>Languages</div>
+            <div><strong>~2 min</strong>Typical call</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="agent">
+            <div class="avatar" aria-hidden="true">K</div>
+            <div>
+              <div class="agent-name">Ken</div>
+              <div class="status">
+                <span class="dot" aria-hidden="true"></span>Available now
+              </div>
+            </div>
+          </div>
+          <dl>
+            <div>
+              <dt>You'll need</dt>
+              <dd>Order number, postal code</dd>
+            </div>
+            <div>
+              <dt>Wait time</dt>
+              <dd>None</dd>
+            </div>
+          </dl>
+          <button class="btn" type="button" onclick="openCall()">
+            Call support
+          </button>
+          <p class="hint">Calls run in your browser and use your microphone.</p>
+        </div>
+      </div>
+    </div>
+
+    <main>
+      <section>
+        <div class="wrap">
+          <h2>How it works</h2>
+          <p class="sub">Most calls are done in under two minutes.</p>
+          <ol class="steps">
+            <li>
+              <h3>Call</h3>
+              <p>Click Call support and allow your microphone.</p>
+            </li>
+            <li>
+              <h3>Verify</h3>
+              <p>
+                Ken confirms your order number, postal code and phone number.
+              </p>
+            </li>
+            <li>
+              <h3>Done</h3>
+              <p>
+                Ask for what you need. Ken confirms every change before making
+                it.
+              </p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section>
+        <div class="wrap split">
+          <div>
+            <h2>What Ken can do</h2>
+            <p class="sub">
+              Need something else? Ask for a person at any time.
+            </p>
+          </div>
+          <ul class="list">
+            <li>
+              <span>Order status</span
+              ><span>Shipping stage and delivery date</span>
+            </li>
+            <li>
+              <span>Change an order</span
+              ><span>Shipping, gift wrap, quantities</span>
+            </li>
+            <li>
+              <span>Cancel an order</span
+              ><span>While it is still processing</span>
+            </li>
+            <li><span>Return an item</span><span>After delivery</span></li>
+            <li>
+              <span>Missing or damaged item</span
+              ><span>Report and get a ticket</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <div class="wrap split">
+          <div>
+            <h2>Questions</h2>
+          </div>
+          <div>
+            <details>
+              <summary>Where do I find my order number?</summary>
+              <p>
+                In your confirmation email. It starts with ORD followed by six
+                digits, for example ORD-100003.
+              </p>
+            </details>
+            <details>
+              <summary>Can I cancel after my order has shipped?</summary>
+              <p>
+                No. Orders can be cancelled only while they are processing. Once
+                it arrives, you can start a return instead.
+              </p>
+            </details>
+            <details>
+              <summary>Can I speak German?</summary>
+              <p>Yes. Just start speaking German and Ken will switch.</p>
+            </details>
+            <details>
+              <summary>Can I talk to a person?</summary>
+              <p>
+                Yes. Ask Ken at any time and your call will be transferred to
+                our support team.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <span>© ElectroVia</span>
+        <span
+          >ElectroVia is a fictional brand created for a NiCE Cognigy capstone
+          project.</span
+        >
+      </div>
+    </footer>
+
+    <div class="panel" id="panel" role="dialog" aria-label="Call support">
+      <div class="panel-head">
+        <span>Call support</span>
+        <div>
+          <button class="link" type="button" onclick="popout()">
+            New window
+          </button>
+          <button class="link" type="button" onclick="closeCall()">
+            Close
+          </button>
+        </div>
+      </div>
+      <iframe
+        id="frame"
+        title="Call support"
+        allow="microphone; autoplay"
+      ></iframe>
+    </div>
+
+    <script>
+      const CALL_URL =
+        "https://static-trial.cognigy.ai/webrtc/?token=ef4bd89bfffe170a77bb040ba4aab47224092e78624be4ec7f957717c39dfa2a";
+      const panel = document.getElementById("panel");
+      const frame = document.getElementById("frame");
+      function openCall() {
+        if (!frame.src) frame.src = CALL_URL;
+        panel.classList.add("open");
+      }
+      function closeCall() {
+        panel.classList.remove("open");
+        frame.removeAttribute("src");
+      }
+      function popout() {
+        window.open(CALL_URL, "electrovia_call", "width=420,height=680");
+        closeCall();
+      }
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeCall();
+      });
+    </script>
+  </body>
+</html>
