@@ -408,10 +408,43 @@
       .link:hover {
         color: var(--ink);
       }
-      .panel iframe {
+      .panel-body {
+        flex: 1;
+        display: flex;
+        min-height: 0;
+      }
+      .pane {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+      .pane iframe {
         flex: 1;
         width: 100%;
         border: 0;
+      }
+      .pane-form {
+        display: none;
+        border-left: 1px solid var(--line);
+        background: #fafaf8;
+      }
+      .pane-note {
+        padding: 10px 16px;
+        font-size: 13px;
+        color: var(--muted);
+        border-bottom: 1px solid var(--line);
+        background: #fff;
+      }
+      .panel.with-form {
+        width: 780px;
+      }
+      .panel.with-form .pane-form {
+        display: flex;
+      }
+      .link[aria-pressed="true"] {
+        color: var(--accent);
+        font-weight: 500;
       }
 
       @media (max-width: 860px) {
@@ -453,6 +486,27 @@
           max-height: none;
           border-radius: 0;
           border: 0;
+        }
+      }
+      @media (max-width: 860px) {
+        /* Small screens: the form replaces the call view; the call keeps running in the background */
+        .panel.with-form {
+          width: 380px;
+        }
+        .panel.with-form .pane-call {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          opacity: 0;
+          pointer-events: none;
+        }
+        .panel.with-form .pane-form {
+          border-left: 0;
+        }
+      }
+      @media (max-width: 600px) {
+        .panel.with-form {
+          width: auto;
         }
       }
     </style>
@@ -510,7 +564,10 @@
           <button class="btn" type="button" onclick="openCall()">
             Call support
           </button>
-          <p class="hint">Calls run in your browser and use your microphone.</p>
+          <p class="hint">
+            Calls run in your browser and use your microphone. If Ken reads you
+            a PIN, click <strong>Enter PIN</strong> in the call window.
+          </p>
         </div>
       </div>
     </div>
@@ -593,6 +650,16 @@
               </p>
             </details>
             <details>
+              <summary>Ken read me a PIN. What do I do?</summary>
+              <p>
+                For changes, returns and missing-item reports you can fill in a
+                short form instead of spelling details out. Click Enter PIN in
+                the call window and type the six characters Ken reads out. Stay
+                on the call; Ken continues as soon as you submit the form. You
+                can also just tell Ken the details.
+              </p>
+            </details>
+            <details>
               <summary>Can I speak German?</summary>
               <p>Yes. Just start speaking German and Ken will switch.</p>
             </details>
@@ -622,6 +689,15 @@
       <div class="panel-head">
         <span>Call support</span>
         <div>
+          <button
+            class="link"
+            type="button"
+            id="formBtn"
+            aria-pressed="false"
+            onclick="toggleForm()"
+          >
+            Enter PIN
+          </button>
           <button class="link" type="button" onclick="popout()">
             New window
           </button>
@@ -630,11 +706,21 @@
           </button>
         </div>
       </div>
-      <iframe
-        id="frame"
-        title="Call support"
-        allow="microphone; autoplay"
-      ></iframe>
+      <div class="panel-body">
+        <div class="pane pane-call">
+          <iframe
+            id="frame"
+            title="Call support"
+            allow="microphone; autoplay"
+          ></iframe>
+        </div>
+        <div class="pane pane-form">
+          <p class="pane-note">
+            Type the PIN Ken reads out. Your call keeps running.
+          </p>
+          <iframe id="formFrame" title="ElectroVia form"></iframe>
+        </div>
+      </div>
     </div>
 
     <script>
@@ -642,13 +728,30 @@
         "https://static-trial.cognigy.ai/webrtc/?token=ef4bd89bfffe170a77bb040ba4aab47224092e78624be4ec7f957717c39dfa2a";
       const panel = document.getElementById("panel");
       const frame = document.getElementById("frame");
+      const FORM_URL = "https://static-trial.cognigy.ai/"; // xApp PIN page (input.apps.baseUrl)
+      const formFrame = document.getElementById("formFrame");
+      const formBtn = document.getElementById("formBtn");
       function openCall() {
         if (!frame.src) frame.src = CALL_URL;
         panel.classList.add("open");
       }
+      function toggleForm() {
+        const on = !panel.classList.contains("with-form");
+        if (on) formFrame.src = FORM_URL; // fresh PIN screen each time
+        panel.classList.toggle("with-form", on);
+        formBtn.setAttribute("aria-pressed", String(on));
+        formBtn.textContent = on
+          ? matchMedia("(max-width:860px)").matches
+            ? "Back to call"
+            : "Close form"
+          : "Enter PIN";
+      }
       function closeCall() {
-        panel.classList.remove("open");
+        panel.classList.remove("open", "with-form");
         frame.removeAttribute("src");
+        formFrame.removeAttribute("src");
+        formBtn.setAttribute("aria-pressed", "false");
+        formBtn.textContent = "Enter PIN";
       }
       function popout() {
         window.open(CALL_URL, "electrovia_call", "width=420,height=680");
